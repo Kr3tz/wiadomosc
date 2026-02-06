@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>💌 Walentynka</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        (function(){
+            emailjs.init("DDI2WoWA92_s7be-m");
+        })();
+    </script>
+</head>
+<body>
+
+<div id="loader">
+    <div class="spinner"></div>
+    <p>Ładowanie…</p>
+</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <p>Muszę Cię o coś zapytać…</p>
+        <button onclick="showMainContent()">OK</button>
+    </div>
+</div>
+
+<div class="page" id="mainContent" style="display: none;">
+
+    <div class="photo">
+        <img src="zdj1.jfif" alt="">
+    </div>
+
+    <div class="container">
+
+        <div id="card">
+            <h1 id="question">Czy chcesz być moją walentynką? ❤️</h1>
+            <div class="buttons">
+                <button onclick="answer(true)">Tak</button>
+                <button class="no" onclick="answer(false)">Nie</button>
+            </div>
+        </div>
+
+        <div id="message">
+            <div class="photo-center">
+                <img src="zdj3.jfif" alt="">
+            </div>
+            <p>
+                Koooooocham cię❤️❤️❤️❤️ <br>
+                Dziękuje że jesteś <br>
+                Najlepsza dzieczyna ever ❤️❤️ <br>
+                (wyślij ss żebym miał 100% pewności że to widzisz XD)
+            </p>
+        </div>
+
+    </div>
+
+    <div class="photo">
+        <img src="zdj2.jfif" alt="">
+    </div>
+
+</div>
+
+<script>
+window.addEventListener("load", function() {
+    setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("modal").style.display = "flex";
+    }, 2000);
+});
+
+function showMainContent() {
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("mainContent").style.display = "flex";
+}
+
+let stage = 1;
+
+function answer(yes) {
+    if (stage === 1 && yes) {
+        sendMail("zgodziła się");
+        showMessage();
+    } 
+    else if (stage === 1 && !yes) {
+        stage = 2;
+        document.getElementById("question").innerText =
+            "Ale jak to… 🥺\nMoże jednak?";
+    } 
+    else if (stage === 2 && yes) {
+        sendMail("zgodziła się ale za drugim razem");
+        showMessage();
+    } 
+    else if (stage === 2 && !yes) {
+        sendMail("no niestety, nie tym razem");
+        document.getElementById("card").innerHTML =
+            "<h1>😔</h1><p>Rozumiem…</p>";
+    }
+}
+
+function showMessage() {
+    document.getElementById("card").style.display = "none";
+    document.getElementById("message").style.display = "flex";
+}
+
+function sendMail(text) {
+    emailjs.send("service_gg0q4q9", "template_f5vwq5k", {
+        message: text
+    })
+    .then(function(response) {
+        console.log("Wiadomość wysłana!", response.status, response.text);
+    }, function(error) {
+        console.error("Błąd przy wysyłce:", error);
+    });
+}
+</script>
+
+</body>
+</html>
